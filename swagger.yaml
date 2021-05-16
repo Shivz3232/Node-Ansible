@@ -1,0 +1,62 @@
+openapi: "3.0.2"
+info:
+  title: Ansible API
+  version: "1.0"
+
+paths:
+  /:
+    get:
+      summary: Check if the server is running
+      responses:
+        "200":
+          desctription: "Server is running"
+
+  /deploy:
+    post:
+      summary: Deploy the given file to the remote machines
+      requestBody:
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                imageName:
+                  type: string
+                hosts:
+                  type: string
+              required:
+                - imageName
+                - hosts
+      responses:
+        "200":
+          description: "Successfully deployed passed in dockerfile"
+
+  /addSystems:
+    post:
+      summary: Add remote machines
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                privateKey:
+                  type: file
+                userNames:
+                  type: array
+                  items:
+                    type: string
+                ipAddresses:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: "Successfully added systems"
+  
+  /api-docs:
+    get:
+      summary: View the swagger API documentation (this page)
+      responses:
+        "200":
+          description: "Successfully served APi documentation"

@@ -1,0 +1,14 @@
+---
+- name: First play
+  hosts: "{{ host }}"
+  remote_user: root
+  tasks:
+    - name: Make sure docker is running on remote machines
+      service:
+        state: started
+        name: docker
+    
+    - name: Run the docker images
+      command: docker run {{ imageName }}
+      
+...
