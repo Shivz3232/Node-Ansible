@@ -47,7 +47,8 @@ app.post('/deploy', (req, res) => {
 app.post('/addSystems', upload.single('privateKey'), async (req, res) => {
     const userNames = typeof (req.body.userNames) == 'string' ? req.body.userNames.split(',') : false;
     const ipAddresses = typeof (req.body.ipAddresses) == 'string' ? req.body.ipAddresses.split(',') : false;
-    if (userNames && ipAddresses && userNames.length == ipAddresses.length && req.file) {
+    const category = typeof (req.body.category) == 'string' && req.body.category.trim().length > 0 ? req.body.category.trim() : false;
+    if (userNames && ipAddresses && category && userNames.length == ipAddresses.length && req.file) {
         const keyPaths = await helpers.savePrivateKeys([ req.file ]);
         
         const systems = [];
@@ -58,7 +59,12 @@ app.post('/addSystems', upload.single('privateKey'), async (req, res) => {
                 keyPath: keyPaths[0]
             });
         }
-        
+
+        await helpers.updateRegistry(JSON.stringify({
+            category,
+            systems
+        }, null, 2));
+    
         /**
          * @todo Figure out logic to add the systems to the ansible hosts file
          */

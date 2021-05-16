@@ -40,6 +40,8 @@ paths:
             schema:
               type: object
               properties:
+                category:
+                  type: string
                 privateKey:
                   type: file
                 userNames:
